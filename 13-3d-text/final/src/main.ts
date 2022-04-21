@@ -50,7 +50,7 @@ fontLoader.load('/fonts/garet_regular.json', (font) => {
   textGeometry.center()
 
   const material = new THREE.MeshMatcapMaterial({ matcap: matcapTexture })
-  // textMaterial.wireframe = true
+  // material.wireframe = true
   const text = new THREE.Mesh(textGeometry, material)
   scene.add(text)
 
