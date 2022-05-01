@@ -7,9 +7,11 @@ import Sizes from './utils/Sizes'
 import Time from './utils/Time'
 import Resources from './utils/Resources'
 import sources from './sources'
+import Debug from './utils/Debug'
 
 let instance: Experience | null = null
 export default class Experience {
+  public debug: Debug
   public sizes: Sizes
   public time: Time
   public scene: THREE.Scene
@@ -25,6 +27,7 @@ export default class Experience {
     instance = this
 
     // setup
+    this.debug = new Debug()
     this.sizes = new Sizes()
     this.time = new Time()
     this.scene = new THREE.Scene()
@@ -54,5 +57,29 @@ export default class Experience {
     this.camera.update()
     this.renderer.update()
     this.world.update()
+  }
+  destroy() {
+    this.sizes.off('resize')
+    this.time.off('tick')
+
+    // Traverse the whole scene
+    this.scene.traverse((child) => {
+      // Test if it's a mesh
+      if (child instanceof THREE.Mesh) {
+        child.geometry.dispose()
+
+        // Loop through the material properties
+        for (const key in child.material) {
+          const value = child.material[key]
+
+          // Test if there is a dispose function
+          if (value && typeof value.dispose === 'function') {
+            value.dispose()
+          }
+        }
+      }
+    })
+    this.camera.controls.dispose()
+    this.renderer.instance.dispose()
   }
 }
