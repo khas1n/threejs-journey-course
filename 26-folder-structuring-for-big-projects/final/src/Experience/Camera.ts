@@ -7,12 +7,13 @@ import Sizes from './utils/Sizes'
 export default class Camera {
   instance: THREE.PerspectiveCamera
   controls: OrbitControls
-  experience: Experience = new Experience()
-  sizes: Sizes = this.experience.sizes
-  scene: THREE.Scene = this.experience.scene
-  canvas: HTMLElement | undefined = this.experience.canvas
+  experienceInstance: Experience = new Experience()
+  sizes: Sizes = this.experienceInstance.sizes
+  scene: THREE.Scene = this.experienceInstance.scene
+  canvas: HTMLElement | undefined = this.experienceInstance.canvas
   constructor() {
     this.setInstance()
+    this.setControls()
   }
   setInstance() {
     this.instance = new THREE.PerspectiveCamera(35, this.sizes.width / this.sizes.height, 0.1, 100)
